@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="create-tables-1" author="vagabov">
+        <comment>Создание таблицы БД "Пользователи"</comment>
+        <createSequence sequenceName="user_id_seq" incrementBy="10" cycle="true" minValue="10"
+                        maxValue="1000000" startValue="10"/>
+        <createTable tableName="USERS" remarks="Пользователи">
+            <column name="user_id" type="BIGINT" defaultValueSequenceNext="user_id_seq" remarks="ID пользователя">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="lastname" type="VARCHAR(100)" remarks="Фамилия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="firstname" type="VARCHAR(100)" remarks="Имя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronimyc" type="VARCHAR(100)" remarks="Отчество"/>
+            <column name="birthday" type="DATE" remarks="Дата рождения">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropSequence sequenceName="user_id_seq"/>
+            <dropTable tableName="USERS"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-tables-2" author="vagabov">
+        <comment>Создание справочника типов договоров</comment>
+        <createSequence sequenceName="contract_type_id_seq" incrementBy="10" cycle="true" minValue="10"
+                        maxValue="1000000" startValue="10"/>
+        <createTable tableName="CONTRACT_TYPES" remarks="Справочник типов договоров">
+            <column name="contract_type_id" type="BIGINT" defaultValueSequenceNext="contract_type_id_seq"
+                    remarks="ID типа договора">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="Наименование">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropSequence sequenceName="contract_type_id_seq"/>
+            <dropTable tableName="CONTRACT_TYPES"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-tables-3" author="vagabov">
+        <comment>Создание таблицы БД "Договора"</comment>
+        <createSequence sequenceName="contract_id_seq" incrementBy="10" cycle="true" minValue="10"
+                        maxValue="1000000" startValue="10"/>
+        <createTable tableName="CONTRACT" remarks="Договора">
+            <column name="contract_id" type="BIGINT" defaultValueSequenceNext="contract_id_seq" remarks="ID договора">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="type_id" type="BIGINT" remarks="ID типа договора">
+                <constraints nullable="false" foreignKeyName="fk_contract_diccntrtype"
+                             referencedTableName="CONTRACT_TYPES" referencedColumnNames="contract_type_id"/>
+            </column>
+            <column name="start_date" type="DATE" defaultValueComputed="now()" remarks="Дата начала">
+                <constraints nullable="false"/>
+            </column>
+            <column name="finish_date" type="DATE" remarks="Дата окончания"/>
+            <column name="user_id" type="BIGINT" remarks="Создатель(пользователь)">
+                <constraints nullable="false" foreignKeyName="fk_contract_users"
+                             referencedTableName="USERS" referencedColumnNames="user_id"/>
+            </column>
+            <column name="amount" type="CURRENCY" remarks="Сумма по договору">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropSequence sequenceName="contract_id_seq"/>
+            <dropTable tableName="CONTRACT"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-tables-4" author="vagabov">
+        <comment>Создание справочника дополнительных полей по типам договора</comment>
+        <createSequence sequenceName="type_field_id_seq" incrementBy="10" cycle="true" minValue="10"
+                        maxValue="1000000" startValue="10"/>
+        <createTable tableName="TYPE_FIELDS" remarks="Справочник дополнительных полей по типам договора">
+            <column name="type_field_id" type="BIGINT" defaultValueSequenceNext="type_field_id_seq"
+                    remarks="ID дополнительного поля">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contract_type_id" type="BIGINT" remarks="ID типа договора">
+                <constraints nullable="false" foreignKeyName="fk_dictypeflds_diccntrtypes"
+                             referencedTableName="CONTRACT_TYPES" referencedColumnNames="contract_type_id"/>
+            </column>
+            <column name="name" type="VARCHAR(255)" remarks="Наименование">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropSequence sequenceName="type_field_id_seq"/>
+            <dropTable tableName="TYPE_FIELDS"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-tables-5" author="vagabov">
+        <comment>Создание таблицы БД "Значения дополнительных полей"</comment>
+        <createSequence sequenceName="field_value_id_seq" incrementBy="10" cycle="true" minValue="10"
+                        maxValue="1000000" startValue="10"/>
+        <createTable tableName="TYPE_FIELD_VALUES" remarks="Значения дополнительных полей">
+            <column name="field_value_id" defaultValueSequenceNext="field_value_id_seq" type="BIGINT"
+                    remarks="ID значения доп. поля">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="contract_id" type="BIGINT" remarks="ID договора">
+                <constraints nullable="false" foreignKeyName="fk_typefldvalues_contract"
+                             referencedTableName="CONTRACT" referencedColumnNames="contract_id"/>
+            </column>
+            <column name="type_field_id" type="BIGINT" remarks="ID доп. поля">
+                <constraints nullable="false" foreignKeyName="fk_typefldvalues_dictypeflds"
+                             referencedTableName="TYPE_FIELDS" referencedColumnNames="type_field_id"/>
+            </column>
+            <column name="value" type="VARCHAR(255)" remarks="Значение доп. поля"/>
+        </createTable>
+        <rollback>
+            <dropSequence sequenceName="field_value_id_seq"/>
+            <dropTable tableName="TYPE_FIELD_VALUES"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-checks" author="vagabov">
+        <comment>Добавление CHECK CONSTRAINT</comment>
+        <sql>
+            ALTER TABLE public.CONTRACT ADD CONSTRAINT ch_contr_amount CHECK (amount &gt;= 1000);
+            ALTER TABLE public.CONTRACT ADD CONSTRAINT ch_contr_startdate CHECK (start_date &lt; finish_date);
+            ALTER TABLE public.CONTRACT ADD CONSTRAINT ch_contr_finishdate CHECK (finish_date &gt; start_date);
+        </sql>
+        <rollback>
+            ALTER TABLE public.CONTRACT DROP CONSTRAINT ch_contr_amount;
+            ALTER TABLE public.CONTRACT DROP CONSTRAINT ch_contr_startdate;
+            ALTER TABLE public.CONTRACT DROP CONSTRAINT ch_contr_finishdate;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-indexes" author="vagabov">
+        <comment>Создание индексов</comment>
+        <createIndex tableName="CONTRACT" indexName="idx_contract" unique="true">
+            <column name="start_date" type="DATE"/>
+            <column name="finish_date" type="DATE"/>
+            <column name="amount" type="CURRENCY"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

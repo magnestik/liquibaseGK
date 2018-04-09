@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="fill-tables-1" author="vagabov">
+        <comment>Добавление записи в USERS</comment>
+        <insert tableName="USERS">
+            <column name="lastname" value="Connor"/>
+            <column name="firstname" value="Sarah"/>
+            <column name="birthday" valueDate="1984-10-26"/>
+        </insert>
+        <insert tableName="USERS">
+            <column name="lastname" value="Freeman"/>
+            <column name="firstname" value="Gordon"/>
+            <column name="birthday" valueDate="1998-11-19"/>
+        </insert>
+        <rollback>
+            DELETE FROM USERS WHERE user_id=10;
+            DELETE FROM USERS WHERE user_id=20;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fill-tables-2" author="vagabov">
+        <comment>Добавление записи в CONTRACT_TYPES</comment>
+        <insert tableName="CONTRACT_TYPES">
+            <column name="contract_type_id" value="10"/>
+            <column name="name" value="Договор оказания услуг"/>
+        </insert>
+        <insert tableName="CONTRACT_TYPES">
+            <column name="contract_type_id" value="20"/>
+            <column name="name" value="Договор аренды"/>
+        </insert>
+        <rollback>
+            DELETE FROM CONTRACT_TYPE WHERE contract_type_id=10;
+            DELETE FROM CONTRACT_TYPE WHERE contract_type_id=20;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fill-tables-3" author="vagabov">
+        <comment>Добавление записи в TYPE_FIELDS</comment>
+        <insert tableName="TYPE_FIELDS">
+            <column name="contract_type_id"
+                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
+            <column name="name" value="Наименование компании предоставляющей услугу пользователю"/>
+        </insert>
+        <insert tableName="TYPE_FIELDS">
+            <column name="contract_type_id"
+                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
+            <column name="name" value="Адрес участка аренды"/>
+        </insert>
+        <rollback>
+            DELETE FROM TYPE_FIELDS WHERE name = 'Наименование компании предоставляющей услугу пользователю';
+            DELETE FROM TYPE_FIELDS WHERE name = 'Адрес участка аренды';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="fill-tables-4" author="vagabov">
+        <comment>Добавление Договора</comment>
+        <insert tableName="CONTRACT">
+            <column name="type_id"
+                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
+            <column name="start_date" valueDate="2015-02-01"/>
+            <column name="finish_date" valueDate="2017-01-02"/>
+            <column name="user_id"
+                    valueComputed="(SELECT user_id FROM USERS WHERE lastname='Connor' AND firstname='Sarah' AND birthday='1984-10-26')"/>
+            <column name="amount" valueNumeric="1045.22"/>
+        </insert>
+        <insert tableName="TYPE_FIELD_VALUES">
+            <column name="contract_id" value="10"/>
+            <column name="type_field_id"
+                    valueComputed="(SELECT type_field_id FROM TYPE_FIELDS WHERE name = 'Адрес участка аренды')"/>
+            <column name="value" value="г. Иннополис"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="fill-tables-5" author="vagabov">
+        <comment>Добавление договора</comment>
+        <insert tableName="CONTRACT">
+            <column name="type_id"
+                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
+            <column name="start_date" valueDate="2017-06-20"/>
+            <column name="finish_date" valueDate="2018-01-01"/>
+            <column name="user_id"
+                    valueComputed="(SELECT user_id FROM USERS WHERE lastname='Freeman' AND firstname='Gordon' AND birthday='1998-11-19')"/>
+            <column name="amount" valueNumeric="2566.11"/>
+        </insert>
+        <insert tableName="TYPE_FIELD_VALUES">
+            <column name="contract_id" valueComputed="20"/>
+            <column name="type_field_id"
+                    valueComputed="(SELECT type_field_id FROM TYPE_FIELDS WHERE name = 'Наименование компании предоставляющей услугу пользователю')"/>
+            <column name="value" value="ООО АйТеко"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
