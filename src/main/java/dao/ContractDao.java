@@ -2,8 +2,15 @@ package dao;
 
 import pojo.Contract;
 
-import java.sql.SQLException;
-
 public interface ContractDao {
-    void insert(Contract contract) throws SQLException, ClassNotFoundException;
+
+    void getAll();
+
+    void insert(Contract contract);
+
+    void select(Long contractId);
+
+    void update(Contract contract);
+
+    void delete(Long contractId);
 }

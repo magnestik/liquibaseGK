@@ -21,6 +21,9 @@ public class Contract {
     this.amount = amount;
   }
 
+  public Contract() {
+  }
+
   public long getContractId() {
     return contractId;
   }
