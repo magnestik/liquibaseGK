@@ -21,7 +21,7 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>3.6.0</version>
                 <configuration>
-                    <changeLogFile>/liquibase/changelog-master.xml</changeLogFile>
+                    <changeLogFile>liquibase/changelog-master.xml</changeLogFile>
                     <driver>org.postgresql.Driver</driver>
                     <url>jdbc:postgresql://localhost:5432/liqui</url>
                     <username>postgres</username>
@@ -40,6 +40,7 @@
         </plugins>
         <finalName>liquibaseTest</finalName>
     </build>
+
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>

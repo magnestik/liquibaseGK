@@ -67,7 +67,7 @@
             <column name="type_id"
                     valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
             <column name="start_date" valueDate="2015-02-01"/>
-            <column name="finish_date" valueDate="2017-01-02"/>
+            <column name="finish_date" valueDate="2019-01-02"/>
             <column name="user_id"
                     valueComputed="(SELECT user_id FROM USERS WHERE lastname='Connor' AND firstname='Sarah' AND birthday='1984-10-26')"/>
             <column name="amount" valueNumeric="1045.22"/>
@@ -86,7 +86,7 @@
             <column name="type_id"
                     valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
             <column name="start_date" valueDate="2017-06-20"/>
-            <column name="finish_date" valueDate="2018-01-01"/>
+            <column name="finish_date" valueDate="2019-01-01"/>
             <column name="user_id"
                     valueComputed="(SELECT user_id FROM USERS WHERE lastname='Freeman' AND firstname='Gordon' AND birthday='1998-11-19')"/>
             <column name="amount" valueNumeric="2566.11"/>

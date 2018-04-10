@@ -17,4 +17,10 @@ public interface ContractDao {
     void update(Contract contract);
 
     void deleteContract(Long contractId);
+
+    List<Contract> getFioAndAddress();
+
+    List<Contract> getFioWithMaxAmount();
+
+    List<Contract> getActiveContractsGroupByTypes();
 }
