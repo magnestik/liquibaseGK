@@ -17,4 +17,10 @@ public class ContractServiceTest {
         Integer average = contractService.averageAmount(5000, 6000);
         Assert.assertEquals(new Integer(5500), average);
     }
+
+    @Test
+    public void averageAmountOverflow() {
+        Integer average = contractService.averageAmount(Integer.MAX_VALUE, 6000);
+        Assert.assertEquals(new Integer(5500), average);
+    }
 }

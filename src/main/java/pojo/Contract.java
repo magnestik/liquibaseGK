@@ -12,8 +12,7 @@ public class Contract {
   private long userId;
   private Integer amount;
 
-  public Contract(long contractId, long typeId, Date startDate, Date finishDate, long userId, Integer amount) {
-    this.contractId = contractId;
+  public Contract(long typeId, Date startDate, Date finishDate, long userId, Integer amount) {
     this.typeId = typeId;
     this.startDate = startDate;
     this.finishDate = finishDate;
