@@ -14,7 +14,7 @@ public class ContractMapper implements RowMapper<Contract> {
         contract.setStartDate(resultSet.getDate("start_date"));
         contract.setFinishDate(resultSet.getDate("finish_date"));
         contract.setUserId(resultSet.getLong("user_id"));
-        contract.setAmount(resultSet.getBigDecimal("amount"));
+        contract.setAmount(resultSet.getInt("amount"));
         return contract;
     }
 }

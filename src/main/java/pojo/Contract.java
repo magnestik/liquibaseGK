@@ -10,9 +10,9 @@ public class Contract {
   private Date startDate;
   private Date finishDate;
   private long userId;
-  private BigDecimal amount;
+  private Integer amount;
 
-  public Contract(long contractId, long typeId, Date startDate, Date finishDate, long userId, BigDecimal amount) {
+  public Contract(long contractId, long typeId, Date startDate, Date finishDate, long userId, Integer amount) {
     this.contractId = contractId;
     this.typeId = typeId;
     this.startDate = startDate;
@@ -69,11 +69,11 @@ public class Contract {
   }
 
 
-  public BigDecimal getAmount() {
+  public Integer getAmount() {
     return amount;
   }
 
-  public void setAmount(BigDecimal amount) {
+  public void setAmount(Integer amount) {
     this.amount = amount;
   }
 

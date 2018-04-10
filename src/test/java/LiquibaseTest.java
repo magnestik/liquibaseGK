@@ -1,4 +1,5 @@
 import liquibase.Contexts;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -21,35 +22,28 @@ public class LiquibaseTest {
             ClassNotFoundException, LiquibaseException {
 
         Class.forName("org.postgresql.Driver");
-        connection = DriverManager.getConnection("jdbc:postgresql:liqui", "postgres", "qwerty123");
+        connection = DriverManager.getConnection("jdbc:postgresql:liqui-test", "postgres", "qwerty123");
 
         Database database = DatabaseFactory.getInstance()
                 .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-        liquibase = new Liquibase("src\\test\\resources\\liquibase\\changelog-liquibaseTest-1.xml",
+        liquibase = new Liquibase("src\\test\\resources\\liquibase\\changelog-liquiTest-master.xml",
                 new FileSystemResourceAccessor(), database);
-        liquibase.update((Contexts) null);
+        liquibase.update(new Contexts(), new LabelExpression());
     }
 
     @AfterClass
     public static void removeTestData() throws LiquibaseException, SQLException {
-        liquibase.rollback(1000, null);
         connection.close();
     }
 
     @Test
     public void testContract() throws SQLException {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            preparedStatement = connection.prepareStatement("select count(*) as numberOfContract from contract");
-            resultSet = preparedStatement.executeQuery();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("select count(*) as numberOfContract from contract");) {
+            ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             int numberOfContract = resultSet.getInt("numberOfContract");
             Assert.assertEquals(3, numberOfContract);
-        } finally {
-            resultSet.close();
-            preparedStatement.close();
         }
     }
 
