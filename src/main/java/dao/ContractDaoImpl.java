@@ -1,67 +1,69 @@
 package dao;
 
-import Connections.ConnectionManager;
-import Connections.ConnectionManagerImpl;
+import mapper.ContractMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import pojo.Contract;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+import java.util.List;
 
 public class ContractDaoImpl implements ContractDao {
-    private static ConnectionManager connectionManager = ConnectionManagerImpl.getInstance();
+    private DataSource dataSource;
 
-    public void getAll() {
-
+    @Override
+    public List<Contract> getAll() {
+        String sql = "select * from contract";
+        JdbcTemplate selectContract = new JdbcTemplate(dataSource);
+        return selectContract.query(sql, new ContractMapper());
     }
 
+    @Override
+    public void deleteAll() {
+        String sql = "delete from contract";
+        JdbcTemplate deleteContract = new JdbcTemplate(dataSource);
+        deleteContract.update(sql);
+    }
+
+    @Override
     public void insert(Contract contract) {
-        String sql1 = "insert into contract values (default,?,?,?,?,?)";
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql1)
-        ) {
-            preparedStatement.setLong(1, contract.getTypeId());
-            preparedStatement.setDate(2, contract.getStartDate());
-            preparedStatement.setDate(3, contract.getFinishDate());
-            preparedStatement.setLong(4, contract.getUserId());
-            preparedStatement.setBigDecimal(5, contract.getAmount());
-            preparedStatement.executeUpdate();
-        }
+        String sql = "insert into contract values (default,?,?,?,?,?)";
+        JdbcTemplate insertContract = new JdbcTemplate(dataSource);
+        insertContract.update(sql,
+                contract.getTypeId(),
+                contract.getStartDate(),
+                contract.getFinishDate(),
+                contract.getUserId(),
+                contract.getAmount());
     }
 
-    public void select(Long contractId) {
-        Connection connection = connectionManager.getConnection();
-        PreparedStatement preparedStatement =
-                connection.prepareStatement("select * from contract where contract_id = ?");
-        preparedStatement.setLong(1,contractId);
-        preparedStatement.executeQuery();
-        preparedStatement.close();
-        connection.close();
+    @Override
+    public List<Contract> selectContract(Long contractId) {
+        String sql = "select * from contract where contract_id = ?";
+        JdbcTemplate selectContract = new JdbcTemplate(dataSource);
+        return selectContract.query(sql, new Long[]{contractId},new ContractMapper());
     }
 
+    @Override
     public void update(Contract contract) {
         String sql = "update contract set type_id=?, start_date=?, finish_date=?, user_id=?, amount=? where contract_id = ?";
-        try (Connection connection = connectionManager.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            preparedStatement.setLong(1,contract.getTypeId());
-            preparedStatement.setDate(2,contract.getStartDate());
-            preparedStatement.setDate(3,contract.getFinishDate());
-            preparedStatement.setLong(4,contract.getUserId());
-            preparedStatement.setBigDecimal(5,contract.getAmount());
-            preparedStatement.setLong(6, contract.getContractId());
-            preparedStatement.executeUpdate();
-        }
-
+        JdbcTemplate updateContract = new JdbcTemplate(dataSource);
+        updateContract.update(sql,
+                contract.getTypeId(),
+                contract.getStartDate(),
+                contract.getFinishDate(),
+                contract.getUserId(),
+                contract.getAmount(),
+                contract.getContractId());
     }
 
-    public void delete(Long contractId) {
-        Connection connection = connectionManager.getConnection();
-        PreparedStatement preparedStatement =
-                connection.prepareStatement("delete from contract where contract_id = ?");
-        preparedStatement.setLong(1,contractId);
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-        connection.close();
+    @Override
+    public void deleteContract(Long contractId) {
+        String sql = "delete from contract where contract_id = ?";
+        JdbcTemplate deleteContract = new JdbcTemplate(dataSource);
+        deleteContract.update(sql,contractId);
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }

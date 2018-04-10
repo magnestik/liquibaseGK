@@ -2,15 +2,19 @@ package dao;
 
 import pojo.Contract;
 
+import java.util.List;
+
 public interface ContractDao {
 
-    void getAll();
+    List<Contract> getAll();
+
+    void deleteAll();
 
     void insert(Contract contract);
 
-    void select(Long contractId);
+    List<Contract> selectContract(Long contractId);
 
     void update(Contract contract);
 
-    void delete(Long contractId);
+    void deleteContract(Long contractId);
 }
