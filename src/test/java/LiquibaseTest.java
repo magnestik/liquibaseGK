@@ -15,7 +15,6 @@ import java.sql.*;
 
 public class LiquibaseTest {
     private static Connection connection;
-    private static Liquibase liquibase;
 
     @BeforeClass
     public static void createTestData() throws SQLException,
@@ -27,7 +26,7 @@ public class LiquibaseTest {
         Database database = DatabaseFactory.getInstance()
                 .findCorrectDatabaseImplementation(new JdbcConnection(connection));
 
-        liquibase = new Liquibase("src\\test\\resources\\liquibase\\changelog-liquiTest-master.xml",
+        Liquibase liquibase = new Liquibase("src\\test\\resources\\liquibase\\changelog-liquiTest-master.xml",
                 new FileSystemResourceAccessor(), database);
         liquibase.update(new Contexts(), new LabelExpression());
     }
