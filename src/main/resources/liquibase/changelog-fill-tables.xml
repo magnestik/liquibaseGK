@@ -5,6 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <property name="RENT_CONTRACT_TYPE" value="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
+    <property name="LEASE_CONTRACT_TYPE" value="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
+
     <changeSet id="fill-tables-1" author="vagabov">
         <comment>Добавление записи в USERS</comment>
         <insert tableName="USERS">
@@ -46,13 +49,13 @@
         <insert tableName="TYPE_FIELDS">
             <column name="type_field_id" value="10"/>
             <column name="contract_type_id"
-                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
+                    valueComputed="${RENT_CONTRACT_TYPE}"/>
             <column name="name" value="Наименование компании предоставляющей услугу пользователю"/>
         </insert>
         <insert tableName="TYPE_FIELDS">
             <column name="type_field_id" value="20"/>
             <column name="contract_type_id"
-                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
+                    valueComputed="${LEASE_CONTRACT_TYPE}"/>
             <column name="name" value="Адрес участка аренды"/>
         </insert>
         <rollback>
@@ -65,7 +68,7 @@
         <comment>Добавление Договора</comment>
         <insert tableName="CONTRACT">
             <column name="type_id"
-                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор аренды')"/>
+                    valueComputed="${LEASE_CONTRACT_TYPE}"/>
             <column name="start_date" valueDate="2015-02-01"/>
             <column name="finish_date" valueDate="2019-01-02"/>
             <column name="user_id"
@@ -84,7 +87,7 @@
         <comment>Добавление договора</comment>
         <insert tableName="CONTRACT">
             <column name="type_id"
-                    valueComputed="(SELECT contract_type_id FROM CONTRACT_TYPES WHERE name = 'Договор оказания услуг')"/>
+                    valueComputed="${RENT_CONTRACT_TYPE}"/>
             <column name="start_date" valueDate="2017-06-20"/>
             <column name="finish_date" valueDate="2019-01-01"/>
             <column name="user_id"

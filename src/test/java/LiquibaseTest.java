@@ -32,17 +32,21 @@ public class LiquibaseTest {
     }
 
     @AfterClass
-    public static void removeTestData() throws LiquibaseException, SQLException {
+    public static void removeTestData() throws SQLException {
         connection.close();
     }
 
     @Test
-    public void testContract() throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("select count(*) as numberOfContract from contract");) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            int numberOfContract = resultSet.getInt("numberOfContract");
+    public void testContract() {
+        try(Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("select count(*) as numberOfContract from contract")){
+            int numberOfContract = 0;
+            while (resultSet.next()){
+                numberOfContract = resultSet.getInt("numberOfContract");
+            }
             Assert.assertEquals(3, numberOfContract);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());;
         }
     }
 

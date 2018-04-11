@@ -4,7 +4,7 @@ import connections.ConnectionManager;
 import connections.ConnectionManagerImpl;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
-import pojo.Contract;
+import entity.Contract;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
