@@ -1,6 +1,5 @@
 package pojo;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Contract {
@@ -11,6 +10,9 @@ public class Contract {
   private Date finishDate;
   private long userId;
   private Integer amount;
+  private String userFio;
+  private String address;
+  private String companyName;
 
   public Contract(long typeId, Date startDate, Date finishDate, long userId, Integer amount) {
     this.typeId = typeId;
@@ -76,4 +78,27 @@ public class Contract {
     this.amount = amount;
   }
 
+  public String getUserFio() {
+    return userFio;
+  }
+
+  public void setUserFio(String userFio) {
+    this.userFio = userFio;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public String getCompanyName() {
+    return companyName;
+  }
+
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
+  }
 }

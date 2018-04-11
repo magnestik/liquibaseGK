@@ -9,7 +9,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class ContractServiceTest {
 
-    @InjectMocks
     private ContractService contractService = new ContractService();
 
     @Test
@@ -20,7 +19,7 @@ public class ContractServiceTest {
 
     @Test
     public void averageAmountOverflow() {
-        Integer average = contractService.averageAmount(Integer.MAX_VALUE, 6000);
-        Assert.assertEquals(new Integer(5500), average);
+        Integer average = contractService.averageAmount(Integer.MAX_VALUE, 5000);
+        Assert.assertEquals(new Integer(1073744324), average);
     }
 }

@@ -20,8 +20,7 @@
             <column name="birthday" valueDate="1998-11-19"/>
         </insert>
         <rollback>
-            DELETE FROM USERS WHERE user_id=10;
-            DELETE FROM USERS WHERE user_id=20;
+            DELETE FROM USERS WHERE user_id in (10, 20);
         </rollback>
     </changeSet>
 
@@ -36,8 +35,7 @@
             <column name="name" value="Договор аренды"/>
         </insert>
         <rollback>
-            DELETE FROM CONTRACT_TYPE WHERE contract_type_id=10;
-            DELETE FROM CONTRACT_TYPE WHERE contract_type_id=20;
+            DELETE FROM CONTRACT_TYPE WHERE contract_type_id in (10, 20);
         </rollback>
     </changeSet>
 
@@ -56,8 +54,7 @@
             <column name="name" value="Адрес участка аренды"/>
         </insert>
         <rollback>
-            DELETE FROM TYPE_FIELDS WHERE type_field_id = 10;
-            DELETE FROM TYPE_FIELDS WHERE type_field_id = 20;
+            DELETE FROM TYPE_FIELDS WHERE type_field_id in (10, 20);
         </rollback>
     </changeSet>
 
