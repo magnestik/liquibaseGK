@@ -43,7 +43,7 @@ public class ContractDaoImpl implements ContractDao {
         List<Contract> contracts = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_FIO_WITH_MAX_AMOUNT)){
+            ResultSet resultSet = statement.executeQuery(SELECT_FIO_AND_ADDRESS)){
             while (resultSet.next()){
                 Contract contract = new Contract();
                 String userFio = resultSet.getString("lastname") + " " +
@@ -64,7 +64,7 @@ public class ContractDaoImpl implements ContractDao {
         List<Contract> contracts = new ArrayList<>();
         try(Connection connection = connectionManager.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(SELECT_FIO_AND_ADDRESS)){
+            ResultSet resultSet = statement.executeQuery(SELECT_FIO_WITH_MAX_AMOUNT)){
             while (resultSet.next()){
                 Contract contract = new Contract();
                 String userFio = resultSet.getString("lastname") + " " +
@@ -89,7 +89,7 @@ public class ContractDaoImpl implements ContractDao {
             while (resultSet.next()){
                 Contract contract = new Contract();
                 contract.setCompanyName(resultSet.getString("name"));
-                contract.setAmount(resultSet.getInt("amount"));
+                contract.setAmount(resultSet.getInt("type"));
                 contracts.add(contract);
             }
         } catch (SQLException e) {

@@ -14,17 +14,6 @@ public class Contract {
   private String address;
   private String companyName;
 
-  public Contract(long typeId, Date startDate, Date finishDate, long userId, Integer amount) {
-    this.typeId = typeId;
-    this.startDate = startDate;
-    this.finishDate = finishDate;
-    this.userId = userId;
-    this.amount = amount;
-  }
-
-  public Contract() {
-  }
-
   public long getContractId() {
     return contractId;
   }
